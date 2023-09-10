@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+
+generate_ninja () {
+  echo -n > build.ninja
+  
+cat << EOF >> build.ninja
+rule cc
+  command = $CC -c \$in -O2 -Wall -Werror -MD -MF \$out.d -o \$out
+  depfile = \$out.d
+  description = Compiling C object \$out
+
+rule ar
+  command = $AR rcs \$out \$in
+  description = Creating library \$out
+
+rule ld
+  command = $CC \$in -s -o \$out
+  description = Linking executable \$out
+
+build build/liblpe/liblpe.o: cc liblpe/liblpe.c
+build lib/liblpe.a: ar build/liblpe/liblpe.o
+EOF
+}
+
+CC=${CC:-gcc}
+AR=${AR:-ar}
+generate_ninja
