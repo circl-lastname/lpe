@@ -9,3 +9,4 @@ The Lenna test image, as passed through LPE. The LPE file is 122.8 kB in size.
 
 ## In this repository
 * [liblpe](liblpe) - The reference implementation of LPE
+* [lpe-utils](lpe-utils) - Utilities to convert between bitmaps to LPE files

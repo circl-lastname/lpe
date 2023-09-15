@@ -6,7 +6,7 @@ generate_ninja () {
   
 cat << EOF >> build.ninja
 rule cc
-  command = $CC -c \$in -O2 -Wall -Werror -MD -MF \$out.d -o \$out
+  command = $CC -c \$in -O2 -Wall -Werror -Iliblpe -MD -MF \$out.d -o \$out
   depfile = \$out.d
   description = Compiling C object \$out
 
@@ -15,11 +15,20 @@ rule ar
   description = Creating library \$out
 
 rule ld
-  command = $CC \$in -s -o \$out
+  command = $CC \$in -s -Llib -llpe -o \$out
   description = Linking executable \$out
 
 build build/liblpe/liblpe.o: cc liblpe/liblpe.c
 build lib/liblpe.a: ar build/liblpe/liblpe.o
+build liblpe: phony lib/liblpe.a
+
+build build/lpe-utils/bitmap2lpe.o: cc lpe-utils/bitmap2lpe.c
+build bin/bitmap2lpe: ld build/lpe-utils/bitmap2lpe.o | liblpe
+build build/lpe-utils/lpe2bitmap.o: cc lpe-utils/lpe2bitmap.c
+build bin/lpe2bitmap: ld build/lpe-utils/lpe2bitmap.o | liblpe
+build lpe-utils: phony bin/bitmap2lpe bin/lpe2bitmap
+
+default lpe-utils
 EOF
 }
 
