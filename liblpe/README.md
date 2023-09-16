@@ -26,5 +26,5 @@ liblpe_image_info_t image_info = liblpe_decode_get_image_info(input); // Get the
 
 void* output = malloc(liblpe_decode_get_output_size(input)); // Allocate a buffer that holds the output bitmap
 
-liblpe_decode(input, output) // Decode the LPE file (input)
+liblpe_decode(input, output); // Decode the LPE file (input)
 ```
