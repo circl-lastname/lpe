@@ -111,38 +111,40 @@ void liblpe_encode(liblpe_image_info_t* image_info, const void* input, void* out
       int error = 0;
       
       for (unsigned raw_x = 0; raw_x < image_info->width; raw_x++) {
-        unsigned x;
-        
-        if (y % 2) {
-          x = (image_info->width-1) - raw_x;
-        } else {
-          x = raw_x;
+        if (y < image_info->height && raw_x < image_info->width) {
+          unsigned x;
+          
+          if (y % 2) {
+            x = (image_info->width-1) - raw_x;
+          } else {
+            x = raw_x;
+          }
+          
+          uint8_t* block = &BLOCK_AT_XY(x/8, y/8, 0);
+          
+          int target = INPUT_AT_XY(x, y) + error;
+          
+          int delta_low = target - *(block+0);
+          int delta_high = target - *(block+1);
+          
+          delta_low = delta_low < 0 ? -delta_low : delta_low;
+          delta_high = delta_high < 0 ? -delta_high : delta_high;
+          
+          int quantized = 0;
+          unsigned value = 0;
+          
+          if (delta_low <= delta_high) {
+            quantized = *(block+0);
+            value = 0;
+          } else {
+            quantized = *(block+1);
+            value = 1;
+          }
+          
+          *(block+(2 + y % 8)) |= value << (x % 8);
+          
+          error = target - quantized;
         }
-        
-        uint8_t* block = &BLOCK_AT_XY(x/8, y/8, 0);
-        
-        int target = INPUT_AT_XY(x, y) + error;
-        
-        int delta_low = target - *(block+0);
-        int delta_high = target - *(block+1);
-        
-        delta_low = delta_low < 0 ? -delta_low : delta_low;
-        delta_high = delta_high < 0 ? -delta_high : delta_high;
-        
-        int quantized = 0;
-        unsigned value = 0;
-        
-        if (delta_low <= delta_high) {
-          quantized = *(block+0);
-          value = 0;
-        } else {
-          quantized = *(block+1);
-          value = 1;
-        }
-        
-        *(block+(2 + y % 8)) |= value << (x % 8);
-        
-        error = target - quantized;
       }
     }
   }
