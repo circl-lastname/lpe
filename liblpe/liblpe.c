@@ -26,7 +26,7 @@ size_t liblpe_encode_get_output_size(liblpe_image_info_t* image_info) {
 }
 
 #define INPUT_AT_XY(x, y) input_u8[((y)*image_info->width+(x))*channels+channel]
-#define BLOCK_AT_XY(x, y, o) output_u8[8+channel*blocks_per_channel*10+((y)*y_blocks+(x))*10+(o)]
+#define BLOCK_AT_XY(x, y, o) output_u8[8+channel*blocks_per_channel*10+((y)*x_blocks+(x))*10+(o)]
 
 void liblpe_encode(liblpe_image_info_t* image_info, const void* input, void* output) {
   const uint8_t* input_u8 = input;
@@ -182,7 +182,7 @@ size_t liblpe_decode_get_output_size(const void* input) {
 }
 
 #define OUTPUT_AT_XY(x, y) output_u8[((y)*image_info->width+(x))*channels+channel]
-#define BLOCK_AT_XY(x, y, o) input_u8[8+channel*blocks_per_channel*10+((y)*y_blocks+(x))*10+(o)]
+#define BLOCK_AT_XY(x, y, o) input_u8[8+channel*blocks_per_channel*10+((y)*x_blocks+(x))*10+(o)]
 
 void liblpe_decode(const void* input, void* output) {
   liblpe_image_info_t image_info_raw = liblpe_decode_get_image_info(input);

@@ -1,7 +1,7 @@
 # liblpe
 liblpe is the reference implementation of the LPE lossy image compression format. It is statically linked, and very highly portable. It is however a bit crude and may not be suited for embedded systems with hardware functions that could speed up the process.
 
-WARNING: Currently there are some obvious memory safety problems as well as an encoding bug when width > height.
+WARNING: Currently there are some obvious memory safety problems!
 
 ## Encoding an LPE file
 liblpe can encode either a top-left origin 8-bit grayscale or top-left origin RGB24 bitmap into an LPE file stored in a buffer. The following C code is an example:
