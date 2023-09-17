@@ -18,15 +18,27 @@ rule ld
   command = $CC \$in -s -Llib -llpe -o \$out
   description = Linking executable \$out
 
+rule install
+  command = install \$in \$out
+  description = Installing \$out
+
 build build/liblpe/liblpe.o: cc liblpe/liblpe.c
 build lib/liblpe.a: ar build/liblpe/liblpe.o
 build liblpe: phony lib/liblpe.a
+build $PREFIX/lib/liblpe.a: install lib/liblpe.a
+build $PREFIX/include/liblpe.h: install liblpe/liblpe.h
+build install-liblpe: phony $PREFIX/lib/liblpe.a $PREFIX/include/liblpe.h
 
 build build/lpe-utils/bitmap2lpe.o: cc lpe-utils/bitmap2lpe.c
 build bin/bitmap2lpe: ld build/lpe-utils/bitmap2lpe.o | liblpe
 build build/lpe-utils/lpe2bitmap.o: cc lpe-utils/lpe2bitmap.c
 build bin/lpe2bitmap: ld build/lpe-utils/lpe2bitmap.o | liblpe
 build lpe-utils: phony bin/bitmap2lpe bin/lpe2bitmap
+build $PREFIX/bin/bitmap2lpe: install bin/bitmap2lpe
+build $PREFIX/bin/lpe2bitmap: install bin/lpe2bitmap
+build install-lpe-utils: phony $PREFIX/bin/bitmap2lpe $PREFIX/bin/lpe2bitmap
+
+build install: phony install-liblpe install-lpe-utils
 
 default lpe-utils
 EOF
@@ -34,4 +46,5 @@ EOF
 
 CC=${CC:-gcc}
 AR=${AR:-ar}
+PREFIX=${PREFIX:-/usr/local}
 generate_ninja
