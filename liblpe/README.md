@@ -3,6 +3,15 @@ liblpe is the reference implementation of the LPE lossy image compression format
 
 WARNING: Currently there are some obvious memory safety problems!
 
+## Installation
+With `gcc` and `ninja` installed:
+
+```
+./configure
+ninja liblpe
+sudo ninja install-liblpe
+```
+
 ## Encoding an LPE file
 liblpe can encode either a top-left origin 8-bit grayscale or top-left origin RGB24 bitmap into an LPE file stored in a buffer. The following C code is an example:
 
