@@ -3,7 +3,7 @@ This is the specification of the LPE (Local Palette Encoding) file format, speci
 
 An LPE file is a standard octet-based file, all binary values contained in it are little endian. The file extenstion used is `.lpe` and its MIME-type may be `image/x-lpe`.
 
-In the case of ambiguity regarding the behavior of an encoder and decoder, the behavior of the references encoder and decoder ([liblpe](../liblpe)) may be assumed.
+In the case of ambiguity regarding the behavior of an encoder and decoder, the behavior of the reference encoder and decoder ([liblpe](../liblpe)) may be assumed.
 
 ## Semantics
 An image is organized into channels, which are organized into blocks. Each block represents an 8x8 part of a channel of the image, and contains a 2 item color palette and an 8x8 1-bit depth bitmap. If the image's width and height are not divisible by 8, a block may represent an area smaller than 8x8 at the right and bottom edges of the image, and the pixels it specifies beyond the bounding box of the image shall be ignored when decoding.
