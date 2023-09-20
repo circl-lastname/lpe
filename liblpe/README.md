@@ -16,6 +16,10 @@ sudo ninja install-liblpe
 liblpe can encode either a top-left origin 8-bit grayscale or top-left origin RGB24 bitmap into an LPE file stored in a buffer. The following C code is an example:
 
 ```c
+#include <liblpe.h>
+
+// ...
+
 liblpe_image_info_t image_info = { // Create the image info struct describing the bitmap
   .width = 640, // The width in pixels of the bitmap
   .height = 480, // The height in pixels of the bitmap
@@ -31,6 +35,10 @@ liblpe_encode(&image_info, input, output); // Encode the bitmap (input)
 liblpe can decode an LPE file stored in a buffer into either a top-left origin 8-bit grayscale or top-left origin RGB24 bitmap. The following C code is an example:
 
 ```c
+#include <liblpe.h>
+
+// ...
+
 liblpe_image_info_t image_info = liblpe_decode_get_image_info(input); // Get the image info struct describing the output bitmap
 
 void* output = malloc(liblpe_decode_get_output_size(input)); // Allocate a buffer that holds the output bitmap
