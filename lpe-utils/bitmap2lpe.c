@@ -60,5 +60,7 @@ int main(int argc, char* argv[]) {
   
   fwrite(output, output_size, 1, stdout);
   
+  fprintf(stderr, "%zu -> %zu (about %zu%% smaller)\n", input_size, output_size, 100-(output_size*100/input_size));
+  
   return 0;
 }
