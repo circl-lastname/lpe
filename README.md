@@ -1,7 +1,7 @@
 # LPE
 Local Palette Encoding (LPE) is a lossy image compression format that provides a compression ratio of 6.4:1 in most cases <sup>1</sup> and acceptable image quality using only simple integer math.
 
-![Lenna](images/lenna.png)
+![Lenna](images/lenna.bmp)
 
 The Lenna test image, as passed through LPE. The [LPE file](images/lenna.lpe) is 122.8 kB in size.
 
