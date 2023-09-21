@@ -40,7 +40,7 @@ build install-lpe-utils: phony $PREFIX/bin/bitmap2lpe $PREFIX/bin/lpe2bitmap
 
 build install: phony install-liblpe install-lpe-utils
 
-default lpe-utils
+default liblpe lpe-utils
 EOF
 }
 
