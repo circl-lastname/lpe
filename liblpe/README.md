@@ -53,7 +53,7 @@ if (image_info_result) {
   error(liblpe_status_to_string(image_info_result));
 }
 
-void* output = malloc(liblpe_decode_get_output_size(input)); // Allocate a buffer that holds the output bitmap
+void* output = malloc(liblpe_get_bitmap_size(&image_info)); // Allocate a buffer that holds the output bitmap
 
 liblpe_status_t result = liblpe_decode(input, input_size, output); // Decode the LPE file (input)
 
