@@ -21,27 +21,38 @@ int main(int argc, char* argv[]) {
     }
   }
   
-  liblpe_image_info_t image_info = liblpe_decode_get_image_info(input);
+  liblpe_image_info_t image_info;
+  
+  liblpe_status_t image_info_result = liblpe_decode_image_info(input, i, &image_info);
+  
+  if (image_info_result) {
+    fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(image_info_result));
+    return 1;
+  }
   
   char* type;
   
   if (image_info.type == LIBLPE_TYPE_GRAYSCALE) {
     type = "grayscale";
-  } else if (image_info.type == LIBLPE_TYPE_RGB) {
+  } else if (image_info.type == LIBLPE_TYPE_RGB24) {
     type = "rgb24";
   } else {
     type = "unknown";
   }
   
-  fprintf(stderr, "Width: %u\nHeight: %u\nType: %s\n", image_info.width, image_info.height, type);
-  
-  size_t output_size = liblpe_decode_get_output_size(input);
-  
+  size_t output_size = liblpe_get_bitmap_size(&image_info);
   uint8_t* output = malloc(output_size);
   
-  liblpe_decode(input, output);
+  liblpe_status_t result = liblpe_decode(input, i, output);
+  
+  if (result) {
+    fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(result));
+    return 1;
+  }
   
   fwrite(output, output_size, 1, stdout);
+  
+  fprintf(stderr, "Width: %u\nHeight: %u\nType: %s\n", image_info.width, image_info.height, type);
   
   return 0;
 }

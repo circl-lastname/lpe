@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
   if (!strcmp(argv[3], "grayscale")) {
     type = LIBLPE_TYPE_GRAYSCALE;
   } else if (!strcmp(argv[3], "rgb24")) {
-    type = LIBLPE_TYPE_RGB;
+    type = LIBLPE_TYPE_RGB24;
   } else {
     fputs("bitmap2lpe: Valid image types are grayscale or rgb24\n", stderr);
     return 1;
@@ -40,27 +40,30 @@ int main(int argc, char* argv[]) {
     .type = type,
   };
   
-  size_t input_size = width * height;
-  
-  if (type == LIBLPE_TYPE_RGB) {
-    input_size *= 3;
-  }
-  
+  size_t input_size = liblpe_get_bitmap_size(&image_info);
   uint8_t* input = malloc(input_size);
   
   for (size_t i = 0; i < input_size; i++) {
     input[i] = getchar();
   }
   
-  size_t output_size = liblpe_encode_get_output_size(&image_info);
-  
+  size_t output_size = liblpe_get_compressed_size(&image_info);
   uint8_t* output = malloc(output_size);
   
-  liblpe_encode(&image_info, input, output);
+  liblpe_status_t result = liblpe_encode(&image_info, input, input_size, output);
+  
+  if (result) {
+    fprintf(stderr, "bitmap2lpe: %s\n", liblpe_status_to_string(result));
+    return 1;
+  }
   
   fwrite(output, output_size, 1, stdout);
   
-  fprintf(stderr, "%zu -> %zu (about %zu%% smaller)\n", input_size, output_size, 100-(output_size*100/input_size));
+  if (output_size < input_size) {
+    fprintf(stderr, "%zu -> %zu (about %zu%% smaller)\n", input_size, output_size, 100-(output_size*100/input_size));
+  } else {
+    fprintf(stderr, "%zu -> %zu", input_size, output_size);
+  }
   
   return 0;
 }

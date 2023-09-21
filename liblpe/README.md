@@ -23,12 +23,17 @@ liblpe can encode either a top-left origin 8-bit grayscale or top-left origin RG
 liblpe_image_info_t image_info = { // Create the image info struct describing the bitmap
   .width = 640, // The width in pixels of the bitmap
   .height = 480, // The height in pixels of the bitmap
-  .type = LIBLPE_TYPE_RGB, // The type of bitmap, this can also be LIBLPE_TYPE_GRAYSCALE
+  .type = LIBLPE_TYPE_RGB24, // The type of bitmap, this can also be LIBLPE_TYPE_GRAYSCALE
 };
 
-void* output = malloc(liblpe_encode_get_output_size(&image_info)); // Allocate a buffer that holds the output file
+void* output = malloc(liblpe_get_compressed_size(&image_info)); // Allocate a buffer that holds the output file
 
-liblpe_encode(&image_info, input, output); // Encode the bitmap (input)
+liblpe_status_t result = liblpe_encode(&image_info, input, input_size, output); // Encode the bitmap (input)
+
+if (result) {
+  // Handle errors
+  error(liblpe_status_to_string(result));
+}
 ```
 
 ## Decoding an LPE file
@@ -39,9 +44,21 @@ liblpe can decode an LPE file stored in a buffer into either a top-left origin 8
 
 // ...
 
-liblpe_image_info_t image_info = liblpe_decode_get_image_info(input); // Get the image info struct describing the output bitmap
+liblpe_image_info_t image_info;
+
+liblpe_status_t image_info_result = liblpe_decode_image_info(input, input_size, &image_info); // Get the image info struct describing the output bitmap
+
+if (image_info_result) {
+  // Handle errors, the file will not decode
+  error(liblpe_status_to_string(image_info_result));
+}
 
 void* output = malloc(liblpe_decode_get_output_size(input)); // Allocate a buffer that holds the output bitmap
 
-liblpe_decode(input, output); // Decode the LPE file (input)
+liblpe_status_t result = liblpe_decode(input, input_size, output); // Decode the LPE file (input)
+
+if (result) {
+  // Handle errors, the file did not decode
+  error(liblpe_status_to_string(result));
+}
 ```
