@@ -1,5 +1,5 @@
 # lpe-utils
-Unix utilities from converting between 8-bit grayscale or RGB24 raw bitmap files and LPE files.
+Unix utilities for converting between 8-bit grayscale or RGB24 raw bitmap files and LPE files.
 
 ## Installation
 With `gcc` and `ninja` installed:
