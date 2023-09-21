@@ -1,7 +1,7 @@
 # liblpe
 liblpe is the reference implementation of the LPE lossy image compression format. It is statically linked, and very highly portable. It is however a bit crude and may not be suited for embedded systems with hardware functions that could speed up the process.
 
-WARNING: Currently there are some obvious memory safety problems!
+WARNING: As with everything in C, make sure that all related allocations are of the right size and properly propagate errors.
 
 ## Installation
 With `gcc` and `ninja` installed:
