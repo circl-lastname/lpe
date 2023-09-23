@@ -63,16 +63,14 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
 }
 
 int main(int argc, char* argv[]) {
-  uint8_t* input = malloc(1024);
-  size_t capacity = 1024;
-  size_t i = 0;
+  uint8_t* input = malloc(65536);
+  size_t capacity = 65536;
+  size_t bytes_read = 0;
   
-  int ch;
-  while ((ch = getchar()) != EOF) {
-    input[i] = ch;
-    i++;
+  while (!feof(stdin)) {
+    bytes_read += fread(input+bytes_read, 1, capacity-bytes_read, stdin);
     
-    if (i >= capacity) {
+    if (capacity == bytes_read) {
       capacity *= 2;
       input = realloc(input, capacity);
     }
@@ -80,7 +78,7 @@ int main(int argc, char* argv[]) {
   
   liblpe_image_info_t image_info;
   
-  liblpe_status_t image_info_result = liblpe_decode_image_info(input, i, &image_info);
+  liblpe_status_t image_info_result = liblpe_decode_image_info(input, bytes_read, &image_info);
   
   if (image_info_result) {
     fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(image_info_result));
@@ -90,7 +88,7 @@ int main(int argc, char* argv[]) {
   size_t output_size = liblpe_get_bitmap_size(&image_info);
   uint8_t* output = malloc(output_size);
   
-  liblpe_status_t result = liblpe_decode(input, i, output);
+  liblpe_status_t result = liblpe_decode(input, bytes_read, output);
   
   if (result) {
     fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(result));

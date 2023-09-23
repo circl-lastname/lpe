@@ -43,8 +43,14 @@ int main(int argc, char* argv[]) {
   size_t input_size = liblpe_get_bitmap_size(&image_info);
   uint8_t* input = malloc(input_size);
   
-  for (size_t i = 0; i < input_size; i++) {
-    input[i] = getchar();
+  size_t bytes_read = 0;
+  while (bytes_read != input_size) {
+    if (feof(stdin)) {
+      fputs("bitmap2lpe: Unexpected end of file\n", stderr);
+      return 1;
+    }
+    
+    bytes_read += fread(input+bytes_read, 1, input_size-bytes_read, stdin);
   }
   
   size_t output_size = liblpe_get_compressed_size(&image_info);
