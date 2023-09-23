@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
   liblpe_status_t image_info_result = liblpe_decode_image_info(input, bytes_read, &image_info);
   
   if (image_info_result) {
-    fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(image_info_result));
+    fprintf(stderr, "lpe2bmp: %s\n", liblpe_status_to_string(image_info_result));
     return 1;
   }
   
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
   liblpe_status_t result = liblpe_decode(input, bytes_read, output);
   
   if (result) {
-    fprintf(stderr, "lpe2bitmap: %s\n", liblpe_status_to_string(result));
+    fprintf(stderr, "lpe2bmp: %s\n", liblpe_status_to_string(result));
     return 1;
   }
   
