@@ -25,7 +25,7 @@ All LPE files start with the following header:
 The header is followed by 1 or more [block streams](#block-stream) (unless either the width or height are equal to 0, in which case the file ends after the header), in the case of an 8-bit grayscale image, there is 1 block stream used to represent the single luminance channel, in the case of an RGB24 image, 3 block streams are used to represent R, G, and B channels in that order.
 
 ## Block stream
-A block stream is an array of the [blocks](#block) of a channel. The amount of items in this array is based on the Width and Height values in the [header](#header), using the equation `ceil(Width/8)` (horizontal blocks) and `ceil(Height/8)` (vertical blocks). The items in this array represent the blocks starting from the top-left, going left-to-right for each column in the row, then top-to-bottom for each row.
+A block stream is an array of the [blocks](#block) of a channel. The amount of items in this array is based on the Width and Height values in the [header](#header), by multiplying the equations `ceil(Width/8)` (horizontal blocks) and `ceil(Height/8)` (vertical blocks). The items in this array represent the blocks starting from the top-left, going left-to-right for each column in the row, then top-to-bottom for each row.
 
 ## Block
 As specified in the [Semantics](#semantics) section, a block represents ideally an 8x8 section of a channel of the image. Its binary format is as follows:
