@@ -58,7 +58,7 @@ size_t liblpe_get_compressed_size(liblpe_image_info_t* image_info) {
 }
 
 const char* liblpe_status_to_string(liblpe_status_t status) {
-  if (status < LIBLPE_STATUS_LAST) {
+  if (status >= 0 && status < LIBLPE_STATUS_LAST) {
     return status_strings[status];
   } else {
     return "Unknown error";
