@@ -201,7 +201,7 @@ liblpe_status_t liblpe_decode_image_info(const void* input, size_t input_size, l
   const uint8_t* input_u8 = input;
   
   if (input_size < 8) {
-    return LIBLPE_STATUS_TOO_SMALL;
+    return LIBLPE_STATUS_NOT_LPE;
   }
   
   if (!(input_u8[0] == 'L' && input_u8[1] == 'P' && input_u8[2] == 'E')) {
