@@ -200,32 +200,32 @@ liblpe_status_t liblpe_encode(liblpe_image_info_t* image_info, const void* input
 liblpe_status_t liblpe_decode_image_info(const void* input, size_t input_size, liblpe_image_info_t* image_info) {
   const uint8_t* input_u8 = input;
   
-  if (input_size >= 8) {
-    if (input_u8[0] == 'L' && input_u8[1] == 'P' && input_u8[2] == 'E') {
-      if ((input_u8[3] & 0x0f) == 1) {
-        image_info->width = 0;
-        image_info->width |= input_u8[4];
-        image_info->width |= input_u8[5] << 8;
-        image_info->height = 0;
-        image_info->height |= input_u8[6];
-        image_info->height |= input_u8[7] << 8;
-        image_info->type = input_u8[3] >> 4;
-        
-        switch (image_info->type) {
-          case LIBLPE_TYPE_GRAYSCALE:
-          case LIBLPE_TYPE_RGB24:
-          break;
-          default:
-            return LIBLPE_STATUS_INVALID_TYPE;
-        }
-      } else {
-        return LIBLPE_STATUS_TOO_NEW;
-      }
-    } else {
-      return LIBLPE_STATUS_NOT_LPE;
-    }
-  } else {
+  if (input_size < 8) {
     return LIBLPE_STATUS_TOO_SMALL;
+  }
+  
+  if (!(input_u8[0] == 'L' && input_u8[1] == 'P' && input_u8[2] == 'E')) {
+    return LIBLPE_STATUS_NOT_LPE;
+  }
+  
+  if ((input_u8[3] & 0x0f) != 1) {
+    return LIBLPE_STATUS_TOO_NEW;
+  }
+  
+  image_info->width = 0;
+  image_info->width |= input_u8[4];
+  image_info->width |= input_u8[5] << 8;
+  image_info->height = 0;
+  image_info->height |= input_u8[6];
+  image_info->height |= input_u8[7] << 8;
+  image_info->type = input_u8[3] >> 4;
+  
+  switch (image_info->type) {
+    case LIBLPE_TYPE_GRAYSCALE:
+    case LIBLPE_TYPE_RGB24:
+    break;
+    default:
+      return LIBLPE_STATUS_INVALID_TYPE;
   }
   
   return LIBLPE_STATUS_SUCCESS;
