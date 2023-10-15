@@ -16,22 +16,23 @@
   putchar(a >> 24);
 
 void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t input_size) {
-  unsigned width_units = image_info->width / 4;
-  unsigned width_alignment = image_info->width % 4;
+  unsigned raw_width_units = (image_info->width*3) / 4;
+  unsigned alignment = 0;
   
-  if (width_alignment) {
-    width_units++;
+  if ((image_info->width*3) % 4) {
+    raw_width_units++;
+    alignment = 4 - (image_info->width*3) % 4;
   }
   
-  unsigned width_aligned = width_units * 4;
+  unsigned raw_width = raw_width_units * 4;
   
-  uint8_t width_alignment_buffer[width_alignment];
+  uint8_t alignment_buffer[alignment];
   
-  for (unsigned i = 0; i < width_alignment; i++) {
-    width_alignment_buffer[i] = 0;
+  for (unsigned i = 0; i < alignment; i++) {
+    alignment_buffer[i] = 0;
   }
   
-  uint32_t size = 54 + input_size;
+  uint32_t size = 54 + raw_width * image_info->height;
   uint32_t offset = 54;
   uint32_t header_size = 40;
   uint32_t width = image_info->width;
@@ -39,7 +40,7 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
   uint16_t planes = 1;
   uint16_t bit_count = 24;
   uint32_t compression = 0;
-  uint32_t image_size = width_aligned * image_info->height * 3;
+  uint32_t image_size = raw_width * image_info->height;
   uint32_t x_ppm = 3780;
   uint32_t y_ppm = 3780;
   uint32_t colors_used = 0;
@@ -70,7 +71,7 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
         putchar(input[y*image_info->width+x]);
       }
       
-      fwrite(width_alignment_buffer, width_alignment, 1, stdout);
+      fwrite(alignment_buffer, alignment, 1, stdout);
     }
   } else if (image_info->type == LIBLPE_TYPE_RGB24) {
     for (unsigned y = 0; y < image_info->height; y++) {
@@ -80,7 +81,7 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
         putchar(input[(y*image_info->width+x)*3+0]);
       }
       
-      fwrite(width_alignment_buffer, width_alignment, 1, stdout);
+      fwrite(alignment_buffer, alignment, 1, stdout);
     }
   }
 }
