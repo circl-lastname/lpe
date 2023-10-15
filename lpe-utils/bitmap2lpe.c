@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
   if (output_size < input_size) {
     fprintf(stderr, "%zu -> %zu (about %zu%% smaller)\n", input_size, output_size, 100-(output_size*100/input_size));
   } else {
-    fprintf(stderr, "%zu -> %zu", input_size, output_size);
+    fprintf(stderr, "%zu -> %zu\n", input_size, output_size);
   }
   
   return 0;
