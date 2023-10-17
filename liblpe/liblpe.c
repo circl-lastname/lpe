@@ -5,7 +5,7 @@
 
 const char* status_strings[] = {
   [LIBLPE_STATUS_SUCCESS] = "Success",
-  [LIBLPE_STATUS_TOO_SMALL] = "File is too small to fit the full image",
+  [LIBLPE_STATUS_TOO_SMALL] = "Input file is too small to fit the full image",
   [LIBLPE_STATUS_INVALID_TYPE] = "Image has invalid or unsupported type",
   [LIBLPE_STATUS_NOT_LPE] = "File is not an LPE file or its header is corrupted",
   [LIBLPE_STATUS_TOO_NEW] = "The version of the LPE file is too new (max version 1)",
