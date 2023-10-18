@@ -26,11 +26,7 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
   
   unsigned raw_width = raw_width_units * 4;
   
-  uint8_t alignment_buffer[alignment];
-  
-  for (unsigned i = 0; i < alignment; i++) {
-    alignment_buffer[i] = 0;
-  }
+  uint8_t alignment_buffer[3] = { 0, 0, 0 };
   
   uint32_t size = 54 + raw_width * image_info->height;
   uint32_t offset = 54;
