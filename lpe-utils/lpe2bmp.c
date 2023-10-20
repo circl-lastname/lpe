@@ -7,13 +7,13 @@
 
 #define WRITE_U16(a) \
   putchar(a); \
-  putchar(a >> 8);
+  putchar(a >> 8)
 
 #define WRITE_U32(a) \
   putchar(a); \
   putchar(a >> 8); \
   putchar(a >> 16); \
-  putchar(a >> 24);
+  putchar(a >> 24)
 
 void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t input_size) {
   unsigned raw_width_units = (image_info->width*3) / 4;
@@ -43,21 +43,21 @@ void output_bmp_file(liblpe_image_info_t* image_info, uint8_t* input, size_t inp
   uint32_t colors_important = 0;
   
   fwrite("BM", 2, 1, stdout);
-  WRITE_U32(size)
-  WRITE_U32(0)
-  WRITE_U32(offset)
+  WRITE_U32(size);
+  WRITE_U32(0);
+  WRITE_U32(offset);
   
-  WRITE_U32(header_size)
-  WRITE_U32(width)
-  WRITE_U32(height)
-  WRITE_U16(planes)
-  WRITE_U16(bit_count)
-  WRITE_U32(compression)
-  WRITE_U32(image_size)
-  WRITE_U32(y_ppm)
-  WRITE_U32(x_ppm)
-  WRITE_U32(colors_used)
-  WRITE_U32(colors_important)
+  WRITE_U32(header_size);
+  WRITE_U32(width);
+  WRITE_U32(height);
+  WRITE_U16(planes);
+  WRITE_U16(bit_count);
+  WRITE_U32(compression);
+  WRITE_U32(image_size);
+  WRITE_U32(y_ppm);
+  WRITE_U32(x_ppm);
+  WRITE_U32(colors_used);
+  WRITE_U32(colors_important);
   
   if (image_info->type == LIBLPE_TYPE_GRAYSCALE) {
     for (unsigned y = 0; y < image_info->height; y++) {
