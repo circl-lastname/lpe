@@ -3,7 +3,7 @@
 
 #include "liblpe.h"
 
-const char* status_strings[] = {
+static const char* status_strings[] = {
   [LIBLPE_STATUS_SUCCESS] = "Success",
   [LIBLPE_STATUS_TOO_SMALL] = "Input file is too small to fit the full image",
   [LIBLPE_STATUS_INVALID_TYPE] = "Image has invalid or unsupported type",
