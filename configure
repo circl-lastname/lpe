@@ -15,7 +15,19 @@ rule ar
   description = Creating library \$out
 
 rule ld
+EOF
+  
+  if [ "$1" = "wasm32" ]; then
+cat << EOF >> build.ninja
+  command = $WASM_LD \$in -s --no-entry --export-all --allow-undefined -Llib -llpe -o \$out
+EOF
+  else
+cat << EOF >> build.ninja
   command = $CC \$in -s -Llib -llpe -o \$out
+EOF
+  fi
+  
+cat << EOF >> build.ninja
   description = Linking executable \$out
 
 rule install
@@ -26,6 +38,10 @@ build build/liblpe/liblpe.o: cc liblpe/liblpe.c
 build lib/liblpe.a: ar build/liblpe/liblpe.o
 build liblpe: phony lib/liblpe.a
 
+EOF
+  
+  if [ "$1" != "wasm32" ]; then
+cat << EOF >> build.ninja
 build $PREFIX/lib/liblpe.a: install lib/liblpe.a
 build $PREFIX/include/liblpe.h: install liblpe/liblpe.h
 build install-liblpe: phony $PREFIX/lib/liblpe.a $PREFIX/include/liblpe.h
@@ -50,9 +66,27 @@ build install: phony install-liblpe install-lpe-utils
 
 default liblpe lpe-utils
 EOF
+  else
+cat << EOF >> build.ninja
+build build/lpe-web/wrapper.o: cc lpe-web/wrapper.c
+build bin/lpe-web/lpe-web.js: install lpe-web/loader.js
+build bin/lpe-web/lpe-web.wasm: ld build/lpe-web/wrapper.o | liblpe
+
+build lpe-web: phony bin/lpe-web/lpe-web.js bin/lpe-web/lpe-web.wasm
+
+default liblpe lpe-web
+EOF
+  fi
 }
 
-CC=${CC:-gcc}
-AR=${AR:-ar}
-PREFIX=${PREFIX:-/usr/local}
-generate_ninja
+if [ "$1" = "wasm32" ]; then
+  CC=${CC:-clang --target=wasm32}
+  AR=${AR:-llvm-ar}
+  WASM_LD=${WASM_LD:-wasm-ld}
+else
+  CC=${CC:-gcc}
+  AR=${AR:-ar}
+  PREFIX=${PREFIX:-/usr/local}
+fi
+
+generate_ninja "$1"
