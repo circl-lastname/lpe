@@ -12,3 +12,4 @@ A mountain range, as passed through LPE. The [LPE file](images/tatra.lpe) is 92.
 * [LPE gallery](docs/lpe_gallery.md) - Gallery of images passed through LPE.
 * [liblpe](liblpe) - The reference implementation of LPE
 * [lpe-utils](lpe-utils) - Utilities to convert between bitmaps to LPE files
+* [lpe-web](lpe-web) - Hacky JavaScript+WASM script that allows LPE files to be used on websites.
